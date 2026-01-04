@@ -112,6 +112,34 @@
 
         <canvas id="gameCanvas"></canvas>
 
+        <!-- Mobile Control Buttons -->
+        <div id="mobile-controls" class="mobile-controls">
+            <div class="control-pad">
+                <button id="btn-up" class="control-btn up" aria-label="Move Up">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+                    </svg>
+                </button>
+                <div class="control-row">
+                    <button id="btn-left" class="control-btn left" aria-label="Move Left">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/>
+                        </svg>
+                    </button>
+                    <button id="btn-down" class="control-btn down" aria-label="Move Down">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/>
+                        </svg>
+                    </button>
+                    <button id="btn-right" class="control-btn right" aria-label="Move Right">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Visual Feedback Elements -->
         <div id="combo-display">
             <div class="combo-text">COMBO x<span id="combo-count">0</span></div>
@@ -124,7 +152,7 @@
         <div id="game-overlay">
             <div class="overlay-content">
                 <h2 id="overlay-title">SNAKE HUNTER</h2>
-                <p id="overlay-message">Use arrow keys or WASD</p>
+                <p id="overlay-message">Use arrow keys, WASD, or swipe</p>
                 <div class="button-group">
                     <button id="start-btn" class="game-btn primary">Start</button>
                     <button id="continue-ad-btn" class="game-btn ad-btn" style="display:none;">

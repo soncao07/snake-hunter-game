@@ -740,6 +740,7 @@ class Game {
         this.setupCanvas();
         this.setupInput();
         this.setupUI();
+        this.setupMobileControls();
 
         this.touchController = new TouchController(this);
     }
@@ -808,6 +809,56 @@ class Game {
 
         startBtn.onclick = () => { this.startCampaign(); };
         menuBtn.onclick = () => { window.menuManager.showScreen('main-menu'); };
+    }
+
+    setupMobileControls() {
+        // Detect if mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const mobileControls = document.getElementById('mobile-controls');
+        
+        if (isMobile && mobileControls) {
+            mobileControls.classList.add('active');
+            
+            // Get control buttons
+            const btnUp = document.getElementById('btn-up');
+            const btnDown = document.getElementById('btn-down');
+            const btnLeft = document.getElementById('btn-left');
+            const btnRight = document.getElementById('btn-right');
+            
+            // Add touch event handlers
+            const handleDirection = (x, y) => {
+                if (this.isRunning && !this.isPaused) {
+                    this.snake.setDirection(x, y);
+                }
+            };
+            
+            // Touch start handlers
+            btnUp.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                handleDirection(0, -1);
+            }, { passive: false });
+            
+            btnDown.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                handleDirection(0, 1);
+            }, { passive: false });
+            
+            btnLeft.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                handleDirection(-1, 0);
+            }, { passive: false });
+            
+            btnRight.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                handleDirection(1, 0);
+            }, { passive: false });
+            
+            // Also support click for testing on desktop
+            btnUp.addEventListener('click', () => handleDirection(0, -1));
+            btnDown.addEventListener('click', () => handleDirection(0, 1));
+            btnLeft.addEventListener('click', () => handleDirection(-1, 0));
+            btnRight.addEventListener('click', () => handleDirection(1, 0));
+        }
     }
 
     pause() {
@@ -1005,6 +1056,12 @@ class Game {
         this.spawnFood();
         this.isRunning = true;
         document.getElementById('game-overlay').classList.remove('visible');
+        
+        // Show mobile controls when game starts
+        const mobileControls = document.getElementById('mobile-controls');
+        if (mobileControls) {
+            mobileControls.classList.add('active');
+        }
 
         // Track level start
         this.poki.trackLevelStart(this.levelIndex, this.isCampaign ? 'campaign' : 'timeattack');
@@ -1078,6 +1135,12 @@ class Game {
 
             document.getElementById('menu-btn').style.display = 'inline-block';
             document.getElementById('game-overlay').classList.add('visible');
+            
+            // Hide mobile controls when game over overlay shows
+            const mobileControls = document.getElementById('mobile-controls');
+            if (mobileControls) {
+                mobileControls.classList.remove('active');
+            }
         }, 500);
     }
 
@@ -1104,6 +1167,12 @@ class Game {
             this.isRunning = true;
             this.poki.gameplayStart();
             this.music.playGameMusic();
+            
+            // Show mobile controls when continuing
+            const mobileControls = document.getElementById('mobile-controls');
+            if (mobileControls) {
+                mobileControls.classList.add('active');
+            }
 
             // Resume time attack timer if in time attack mode (only if not already running)
             if (this.isTimeAttack && this.timeAttackRemaining > 0 && !this.timeAttackInterval) {
@@ -1502,6 +1571,12 @@ class MenuManager {
         document.getElementById(screenId).classList.add('visible');
         this.currentScreen = screenId;
         
+        // Hide mobile controls when not in game screen
+        const mobileControls = document.getElementById('mobile-controls');
+        if (mobileControls) {
+            mobileControls.classList.remove('active');
+        }
+        
         // Track screen views for analytics
         if (window.game && window.game.poki) {
             window.game.poki.trackScreenView(screenId);
@@ -1512,6 +1587,12 @@ class MenuManager {
         document.querySelectorAll('.menu-screen').forEach(s => s.classList.remove('visible'));
         document.getElementById('game-screen').classList.add('active');
         this.currentScreen = 'game-screen';
+        
+        // Show mobile controls when game screen is active
+        const mobileControls = document.getElementById('mobile-controls');
+        if (mobileControls) {
+            mobileControls.classList.add('active');
+        }
 
         if (window.game) {
             if (mode === 'timeattack') {
@@ -1526,11 +1607,24 @@ class MenuManager {
         if (window.game && window.game.isRunning) {
             window.game.pause();
             document.getElementById('pause-menu').classList.add('visible');
+            
+            // Hide mobile controls when pause menu shows
+            const mobileControls = document.getElementById('mobile-controls');
+            if (mobileControls) {
+                mobileControls.classList.remove('active');
+            }
         }
     }
 
     resumeGame() {
         document.getElementById('pause-menu').classList.remove('visible');
+        
+        // Show mobile controls when resuming
+        const mobileControls = document.getElementById('mobile-controls');
+        if (mobileControls && window.game && window.game.isRunning) {
+            mobileControls.classList.add('active');
+        }
+        
         if (window.game) {
             window.game.resume();
         }

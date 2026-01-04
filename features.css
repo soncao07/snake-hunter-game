@@ -1,0 +1,130 @@
+/* === SCORE POPUP & COMBO STYLES === */
+.score-popup {
+    position: absolute;
+    font-weight: 800;
+    font-size: clamp(1rem, 4vw, 1.5rem);
+    color: #fbbf24;
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+    pointer-events: none;
+    z-index: 1000;
+    animation: scorePopup 1s ease-out forwards;
+}
+
+@keyframes scorePopup {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-50px) scale(1.5);
+    }
+}
+
+#combo-display {
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    border: 2px solid #fbbf24;
+    display: none;
+    z-index: 100;
+}
+
+#combo-display.visible {
+    display: block;
+    animation: comboAppear 0.3s ease-out;
+}
+
+@keyframes comboAppear {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) scale(0.5);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+}
+
+#combo-display .combo-text {
+    font-size: clamp(0.9rem, 3vw, 1.2rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+#combo-display .multiplier {
+    font-size: clamp(0.7rem, 2vw, 0.9rem);
+    color: #94a3b8;
+    margin-top: 0.2rem;
+}
+
+/* === TIME ATTACK TIMER === */
+#time-attack-timer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(2rem, 10vw, 4rem);
+    font-weight: 800;
+    color: #fbbf24;
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.8);
+    pointer-events: none;
+    z-index: 50;
+    display: none;
+}
+
+#time-attack-timer.visible {
+    display: block;
+}
+
+#time-attack-timer.warning {
+    color: #ef4444;
+    animation: timerWarning 0.5s ease-in-out infinite;
+}
+
+@keyframes timerWarning {
+
+    0%,
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+/* === MOBILE OPTIMIZATIONS === */
+@media (max-width: 768px) {
+    #combo-display {
+        top: 60px;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .score-popup {
+        font-size: 1.2rem;
+    }
+
+    #time-attack-timer {
+        font-size: 2.5rem;
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+
+    /* Touch device specific styles */
+    .menu-btn,
+    .game-btn {
+        min-height: 54px;
+        /* Larger touch targets */
+    }
+}

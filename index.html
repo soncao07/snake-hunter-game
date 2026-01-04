@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Snake Hunter - Classic snake game with modern graphics">
+    <meta name="theme-color" content="#22c55e">
+    <meta property="og:title" content="Snake Hunter - Snake Game">
+    <meta property="og:description"
+        content="Classic snake game with modern graphics, multiple levels and exciting power-ups!">
+    <meta property="og:type" content="website">
+    <title>Snake Hunter - Snake Game</title>
+    <!-- Favicon using SVG emoji -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="features.css">
+    <!-- Poki SDK -->
+    <script src="https://game-cdn.poki.com/scripts/v2/poki-sdk.js"></script>
+    <script src="poki-sdk.js"></script>
+</head>
+
+<body>
+    <!-- Main Menu -->
+    <div id="main-menu" class="menu-screen visible">
+        <h1 class="game-title">SNAKE HUNTER</h1>
+        <div class="menu-buttons">
+            <button id="campaign-btn" class="menu-btn primary">Campaign</button>
+            <button id="time-attack-btn" class="menu-btn highlight">⏱ Time Attack</button>
+            <button id="how-to-play-btn" class="menu-btn">How to Play</button>
+            <button id="settings-btn" class="menu-btn">Settings</button>
+        </div>
+        <div class="menu-footer">
+            <p>Arrow Keys / WASD / Swipe</p>
+        </div>
+    </div>
+
+    <!-- How to Play Screen -->
+    <div id="how-to-play-screen" class="menu-screen">
+        <h2>How to Play</h2>
+        <div class="tutorial-content">
+            <div class="tutorial-section">
+                <h3>🎮 Controls</h3>
+                <p><strong>PC:</strong> Arrow keys or WASD</p>
+                <p><strong>Mobile:</strong> Swipe screen</p>
+            </div>
+            <div class="tutorial-section">
+                <h3>🎯 Objective</h3>
+                <p>Eat food to score points. Avoid hitting walls and your own body!</p>
+            </div>
+            <div class="tutorial-section">
+                <h3>⚡ Power-ups</h3>
+                <p><span class="powerup-label magnet">MAGNET</span> Attracts food</p>
+                <p><span class="powerup-label shield">SHIELD</span> Protects once</p>
+                <p><span class="powerup-label x2">X2</span> Double points</p>
+                <p><span class="powerup-label cut">CUT</span> Reduces length</p>
+            </div>
+        </div>
+        <button id="back-from-tutorial-btn" class="menu-btn">Back</button>
+    </div>
+
+    <!-- Settings Screen -->
+    <div id="settings-screen" class="menu-screen">
+        <h2>Settings</h2>
+        <div class="settings-content">
+            <div class="setting-item">
+                <label>Sound</label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="sound-toggle" checked>
+                    <span class="slider"></span>
+                </div>
+            </div>
+            <div class="setting-item">
+                <label>Music</label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="music-toggle" checked>
+                    <span class="slider"></span>
+                </div>
+            </div>
+        </div>
+        <button id="back-from-settings-btn" class="menu-btn">Back</button>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen">
+        <div id="hud">
+            <div class="hud-left">
+                <div id="score-display" class="hud-item">
+                    <span class="hud-icon">🍎</span>
+                    <span id="score">0</span>
+                </div>
+            </div>
+            <div class="hud-center">
+                <div id="high-score-display" class="hud-item trophy">
+                    <span class="hud-icon">🏆</span>
+                    <span id="high-score">0</span>
+                </div>
+            </div>
+            <div class="hud-right">
+                <button id="pause-btn" class="pause-button" aria-label="Pause">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <rect x="6" y="4" width="4" height="16" rx="1" />
+                        <rect x="14" y="4" width="4" height="16" rx="1" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- Visual Feedback Elements -->
+        <div id="combo-display">
+            <div class="combo-text">COMBO x<span id="combo-count">0</span></div>
+            <div class="multiplier">Score x<span id="combo-multiplier">1</span></div>
+        </div>
+
+        <div id="time-attack-timer"></div>
+
+        <!-- Game Overlay -->
+        <div id="game-overlay">
+            <div class="overlay-content">
+                <h2 id="overlay-title">SNAKE HUNTER</h2>
+                <p id="overlay-message">Use arrow keys or WASD</p>
+                <div class="button-group">
+                    <button id="start-btn" class="game-btn primary">Start</button>
+                    <button id="continue-ad-btn" class="game-btn ad-btn" style="display:none;">
+                        📺 Watch Ad to Continue
+                    </button>
+                    <button id="menu-btn" class="game-btn">Menu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pause Menu -->
+        <div id="pause-menu">
+            <div class="overlay-content">
+                <h2>Paused</h2>
+                <div class="button-group">
+                    <button id="resume-btn" class="game-btn primary">Resume</button>
+                    <button id="restart-btn" class="game-btn">Restart</button>
+                    <button id="quit-btn" class="game-btn">Menu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
